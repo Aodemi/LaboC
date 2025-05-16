@@ -1,0 +1,13 @@
+﻿<Window x:Class="IdeaManager.UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Idea Manager" Height="300" Width="400">
+    <DockPanel>
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" HorizontalAlignment="Center" Margin="10">
+            <Button Content="Liste des idées" Click="ShowIdeaList_Click" Margin="5"/>
+            <Button Content="Ajouter une idée" Click="ShowIdeaForm_Click" Margin="5"/>
+        </StackPanel>
+
+        <ContentControl x:Name="ContentArea" />
+    </DockPanel>
+</Window>

@@ -1,34 +1,30 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace IdeaManager.UI.ViewModels
 {
     public partial class MainViewModel : ObservableObject
     {
-        private readonly UserControl _ideaListView;
-        private readonly UserControl _ideaFormView;
-
-        public MainViewModel(UserControl ideaListView, UserControl ideaFormView)
-        {
-            _ideaListView = ideaListView;
-            _ideaFormView = ideaFormView;
-            CurrentView = _ideaListView; // Vue par défaut
-        }
+        private readonly IdeaListViewModel _ideaListViewModel;
+        private readonly IdeaFormViewModel _ideaFormViewModel;
 
         [ObservableProperty]
-        private UserControl currentView;
+        private ObservableObject currentViewModel;
 
-        [RelayCommand]
-        private void ShowIdeaList()
-        {
-            CurrentView = _ideaListView;
-        }
+        public ICommand ShowIdeaListCommand { get; }
+        public ICommand ShowIdeaFormCommand { get; }
 
-        [RelayCommand]
-        private void ShowIdeaForm()
+        public MainViewModel(IdeaListViewModel ideaListVM, IdeaFormViewModel ideaFormVM)
         {
-            CurrentView = _ideaFormView;
+            _ideaListViewModel = ideaListVM;
+            _ideaFormViewModel = ideaFormVM;
+
+            ShowIdeaListCommand = new RelayCommand(() => CurrentViewModel = _ideaListViewModel);
+            ShowIdeaFormCommand = new RelayCommand(() => CurrentViewModel = _ideaFormViewModel);
+
+            // Démarrage sur la liste des idées
+            CurrentViewModel = _ideaListViewModel;
         }
     }
 }
