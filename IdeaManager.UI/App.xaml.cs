@@ -1,13 +1,13 @@
-﻿using IdeaManager.Data;
-using IdeaManager.Services;
+﻿using IdeaManager.Services;
+using IdeaManager.Data;
+using IdeaManager.UI.ViewModels;
+using IdeaManager.UI.Views;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Windows;
 
 namespace IdeaManager.UI;
 
-/// <summary>
-/// Interaction logic for App.xaml
-/// </summary>
 public partial class App : Application
 {
     public static IServiceProvider ServiceProvider { get; private set; }
@@ -16,9 +16,21 @@ public partial class App : Application
     {
         var services = new ServiceCollection();
 
+        // Registre Data et Services
         services.AddDataServices("Data Source=ideas.db");
         services.AddDomainServices();
         services.AddUIServices();
+
+        // Ajout des vues
+        services.AddSingleton<IdeaListView>();
+        services.AddSingleton<IdeaFormView>();
+        services.AddSingleton<MenuView>();
+
+        // ViewModels
+        services.AddSingleton<MainViewModel>();
+
+        // Fenêtre principale
+        services.AddSingleton<MainWindow>();
 
         ServiceProvider = services.BuildServiceProvider();
 
@@ -26,4 +38,3 @@ public partial class App : Application
         mainWindow.Show();
     }
 }
-
