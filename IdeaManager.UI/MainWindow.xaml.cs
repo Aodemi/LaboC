@@ -1,27 +1,16 @@
 ﻿using System.Windows;
-using IdeaManager.UI.Views;
+using IdeaManager.UI.ViewModels;
 
-namespace IdeaManager.UI
+namespace IdeaManager.UI;
+
+/// <summary>
+/// Interaction logic for MainWindow.xaml
+/// </summary>
+public partial class MainWindow : Window
 {
-    public partial class MainWindow : Window
+    public MainWindow(MainViewModel viewModel)
     {
-        private readonly IdeaListView _ideaListView = new();
-        private readonly IdeaFormView _ideaFormView = new();
-
-        public MainWindow()
-        {
-            InitializeComponent();
-            ContentArea.Content = _ideaListView; // Afficher IdeaListView par défaut
-        }
-
-        private void ShowIdeaList_Click(object sender, RoutedEventArgs e)
-        {
-            ContentArea.Content = _ideaListView;
-        }
-
-        private void ShowIdeaForm_Click(object sender, RoutedEventArgs e)
-        {
-            ContentArea.Content = _ideaFormView;
-        }
+        InitializeComponent();
+        DataContext = viewModel;
     }
 }

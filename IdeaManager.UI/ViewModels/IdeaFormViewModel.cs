@@ -2,20 +2,20 @@
 using CommunityToolkit.Mvvm.Input;
 using IdeaManager.Core.Entities;
 using IdeaManager.Core.Interfaces;
-using System;
+using System.Globalization;
 using System.Threading.Tasks;
+using System.Windows.Data;
+using System.Windows;
 
 namespace IdeaManager.UI.ViewModels
 {
     public partial class IdeaFormViewModel : ObservableObject
     {
         private readonly IIdeaService _ideaService;
-        private readonly Action _onIdeaSubmitted;
 
-        public IdeaFormViewModel(IIdeaService ideaService, Action onIdeaSubmitted)
+        public IdeaFormViewModel(IIdeaService ideaService)
         {
             _ideaService = ideaService;
-            _onIdeaSubmitted = onIdeaSubmitted;
         }
 
         [ObservableProperty]
@@ -30,14 +30,6 @@ namespace IdeaManager.UI.ViewModels
         [RelayCommand]
         private async Task SubmitAsync()
         {
-            ErrorMessage = string.Empty;
-
-            if (string.IsNullOrWhiteSpace(Title))
-            {
-                ErrorMessage = "Le titre est obligatoire.";
-                return;
-            }
-
             try
             {
                 var idea = new Idea
@@ -47,17 +39,21 @@ namespace IdeaManager.UI.ViewModels
                 };
 
                 await _ideaService.SubmitIdeaAsync(idea);
-
-                // Reset formulaire
-                Title = string.Empty;
-                Description = string.Empty;
-
-                _onIdeaSubmitted?.Invoke();
+                ErrorMessage = string.Empty;
             }
             catch (Exception ex)
             {
                 ErrorMessage = ex.Message;
             }
+            public class StringToVisibilityConverter : IValueConverter
+        {
+            public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+                => string.IsNullOrWhiteSpace(value as string) ? Visibility.Collapsed : Visibility.Visible;
+
+            public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+                => throw new NotSupportedException();
         }
     }
+
+}
 }
